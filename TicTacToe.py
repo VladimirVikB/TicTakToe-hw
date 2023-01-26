@@ -26,6 +26,7 @@ def get_First_Pl():  # Вводим имена игроков и выбирае�
         return f"{pl_er2}"
 
 
+
 def print_map(field):  # печатаем карту
     rows = len(field)
     print('     0   1   2')
@@ -36,11 +37,10 @@ def print_map(field):  # печатаем карту
     return field
 
 
-def start_game(field, player):  # начало игры ввод координат
-    global o
-    global x
+def start_game(field):  # начало игры ввод координат
+    global x, o, player
     while True:
-        print(f"Игрок { player } введите координаты:")
+        print(f"Игрок { player }  введите координаты {simb} :")
         row = input("Выберите строку:")
         column = input("Выберите столбец:")
         point = [row, column]
@@ -62,17 +62,15 @@ def start_game(field, player):  # начало игры ввод координ�
 
 
 def terms_of_win(field):# условия для определения победителя
-    f_list = []
-    print("f", field) # удалить после
+    field_lst = []
     print("\n" "Новый ход")
-    for l in field:
-        f_list += l
-        print("f list", f_list) # удалить после
+    for char in field:
+        field_lst += char
+    print_map(field)
     positions = [[0, 1, 2], [3, 4, 5], [6, 7, 8],
                  [0, 3, 6], [1, 4, 7], [2, 5, 8],
                  [0, 4, 8], [2, 4, 6]]
-    indices = set([key for key, val in enumerate(f_list) if val == simb])
-    print("indices",  indices) # удалить после
+    indices = set([key for key, val in enumerate(field_lst) if val == simb])
     for p in positions:
         if len(indices & (set(p))) == 3:  # пересечение множеств
             return True
@@ -80,20 +78,21 @@ def terms_of_win(field):# условия для определения побе�
 
 
 def start(field): # основной цикл игры
-    count = 0
+    global simb, player # определяет символ Х или О для ввода в клетку
+    count = 1
+    player = (pl_er2 if player in pl_er1 else pl_er1) # меняем вспомогательную переменную на противоположную,
+    # по значению чтобы запустить смену в цикле
     while True:
-        print_map(field)
-        if count % 2 == 0:
-            player = pl_er1
+        if count % 2 != 0:
+            player = (pl_er1 if player in pl_er2 else pl_er2)
             simb = "X"
         else:
-            player = pl_er2
+            player = (pl_er2 if player in pl_er1 else pl_er1)
             simb = "O"
-        if count < 9:
-            x, o = start_game(field, player)
+        if count < 10:
+            x, o = start_game(field)
             field[x][o] = simb
-
-        elif count == 9:
+        elif count == 10:
             print('Никто не смог победить - Ничья')
             break
         if terms_of_win(field):
@@ -103,17 +102,15 @@ def start(field): # основной цикл игры
 
 
 
-pl_er1 = ""
-pl_er2 = ""
-player = ""
-simb = "X"
+pl_er1 = "" # Игрок 1
+pl_er2 = "" # Игрок 2
+player = "" # Вспомогательная переменная игрока
+simb = "X" # определяет символ Х или О для ввода в клетку
 
 field = [['-', '-', '-'],  # первичное наполнение карты
          ['-', '-', '-'],
          ['-', '-', '-']]
 
 main()
-print_map(field)
-start_game(field, player)
 terms_of_win(field)
 start(field)
