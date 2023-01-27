@@ -43,7 +43,7 @@ def get_First_Pl():  # Вводим имена игроков и выбирае�
 
 def print_map(field):  # печатаем карту
     rows = len(field)
-    print('     0   1   2')
+    print("     0   1   2")
     print("   ----+---+----")
     for r in range(rows):
         print(str(r) + "  | " + field[r][0], "|", field[r][1], "|", field[r][2], "|")
@@ -59,17 +59,17 @@ def start_game(field):  # начало игры ввод координат
         column = input("Выберите столбец:")
         point = [row, column]
         if len(point) != 2:
-            print('Введите две координаты')
+            print("Введите две координаты")
             continue
         if not (point[0].isdigit() and point[1].isdigit()):
-            print('Введите числа')
+            print("Введите числа")
             continue
         x, o = map(int, point)
         if not (x >= 0 and x < 3 and o >= 0 and o < 3):
-            print('Вышли из диапазона')
+            print("Введите числа от 0 до 2")
             continue
         if field[x][o] != '-':
-            print('Клетка занята')
+            print("Эта ячейка уже заполнена")
             continue
         break
     return x, o
